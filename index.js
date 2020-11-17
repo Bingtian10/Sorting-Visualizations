@@ -18,7 +18,21 @@ for(let i = 0; i < len; i++) {
 const form = document.querySelector('form');
 form.addEventListener('submit', function(){
   event.preventDefault();
-  mergeSort(arr, 0, arr.length-1);
+  let sort = document.querySelector('form select').value;
+  switch (sort) {
+    case "MergeSort":
+      mergeSort(arr, 0, len-1);
+      break;
+    case "InsertionSort":
+      insertionSort(arr);
+      break;
+    case "BubbleSort":
+      bubbleSort(arr);
+      break;
+    default:
+      console.log("Unknown sort name error");
+  }
+  console.log(arr);
   time = 0;
 });
 
@@ -30,7 +44,7 @@ function mergeSort(nums, l, h) {
     merge(nums, l, mid, h);
     for(let i = l; i <= h; i++) {
       setTimeout(drawArrElement, time, i, nums[i]);
-      time += 30;
+      time += 15;
     }
   }
 }
@@ -80,4 +94,37 @@ function merge(nums, l, m, h) {
 function drawArrElement(pos, num) {
   ctx.clearRect(pos*5, 0, 5, h);
   ctx.fillRect(pos*5, h-num, 5, num);
+}
+
+function insertionSort(nums) {
+  for(let i = 1; i < nums.length; i++) {
+    let temp = nums[i];
+    let j = i-1;
+    while(j >= 0 && nums[j] > temp) {
+      nums[j+1] = nums[j];
+      setTimeout(drawArrElement, time, j+1, nums[j+1]);
+      time += 10;
+      j--;
+    }
+    nums[j+1] = temp;
+    setTimeout(drawArrElement, time, j+1, nums[j+1]);
+    time += 10;
+  }
+}
+
+function bubbleSort(nums) {
+  for(let i = 0; i < nums.length; i++) {
+    for(let j = nums.length-1; j > i; j--) {
+      //Out of order, swap them
+      if(nums[j-1] > nums[j]) {
+        let temp = nums[j];
+        nums[j] = nums[j-1];
+        nums[j-1] = temp;
+        setTimeout(drawArrElement, time, j-1, nums[j-1]);
+        time += 10;
+        setTimeout(drawArrElement, time, j, nums[j]);
+        time += 10;
+      }
+    }
+  }
 }
