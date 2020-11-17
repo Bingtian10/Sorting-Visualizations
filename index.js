@@ -8,17 +8,15 @@ let len = 100;
 let w = canvas.width;
 let h = canvas.height;
 var time = 0;
-
-for(let i = 0; i < len; i++) {
-  let randNum = Math.floor(Math.random() * 100);
-  ctx.fillRect(i*5, h-randNum, 5, randNum);
-  arr.push(randNum);
-}
-
+generate();
+let firstVisit = true;
 const form = document.querySelector('form');
 form.addEventListener('submit', function(){
   event.preventDefault();
   let sort = document.querySelector('form select').value;
+  if(!firstVisit) {
+    generate();
+  }
   switch (sort) {
     case "MergeSort":
       mergeSort(arr, 0, len-1);
@@ -34,8 +32,18 @@ form.addEventListener('submit', function(){
   }
   console.log(arr);
   time = 0;
+  firstVisit = false;
 });
 
+function generate() {
+  arr = [];
+  for(let i = 0; i < len; i++) {
+    let randNum = Math.floor(Math.random() * 100);
+    ctx.clearRect(i*5, 0, 5, h);
+    ctx.fillRect(i*5, h-randNum, 5, randNum);
+    arr.push(randNum);
+  }
+}
 function mergeSort(nums, l, h) {
   if(l < h) {
     let mid = Math.floor((l+h)/2);
